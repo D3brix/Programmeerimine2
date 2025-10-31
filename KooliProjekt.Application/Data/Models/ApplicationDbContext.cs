@@ -1,11 +1,12 @@
-﻿using System;
+﻿using KooliProjekt.Application.Data.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
-namespace KooliProjekt.Application.Data
+namespace KooliProjekt.Application.Data.Models
 {
     public class ApplicationDbContext : DbContext
     {
@@ -15,5 +16,7 @@ namespace KooliProjekt.Application.Data
 
         public DbSet<ToDoList> ToDoLists { get; set; }
         public DbSet<ToDoItem> ToDoItems { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+
     }
 }

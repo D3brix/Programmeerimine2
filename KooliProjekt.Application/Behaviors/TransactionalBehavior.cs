@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Data.Models;
 using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 
