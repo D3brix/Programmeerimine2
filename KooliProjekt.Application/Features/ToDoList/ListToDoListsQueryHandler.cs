@@ -14,7 +14,7 @@ namespace KooliProjekt.Application.Features.ToDoLists
 {
     public class ListToDoListsQueryHandler : IRequestHandler<ListToDoListsQuery, OperationResult<PagedResult<ToDoList>>>
     {
-        private readonly ApplicationDbContext _dbContext;
+        public readonly ApplicationDbContext _dbContext;
 
         public ListToDoListsQueryHandler(ApplicationDbContext dbContext)
         {

@@ -52,5 +52,7 @@ namespace KooliProjekt.WebAPI.Controllers
         public string Mood { get; set; } = "";
         public DateTime NextLesson { get; set; }
     }
+
+
 }
 

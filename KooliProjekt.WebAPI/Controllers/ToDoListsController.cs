@@ -1,25 +1,46 @@
-﻿using KooliProjekt.Application.Features.ToDoLists;
+﻿using System.Threading.Tasks;
+using KooliProjekt.Application.Features.ToDoLists;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace KooliProjekt.WebAPI.Controllers
 {
     public class ToDoListsController : ApiControllerBase
     {
         private readonly IMediator _mediator;
+
         public ToDoListsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        [Route("List")]
+        public async Task<IActionResult> List([FromQuery] ListToDoListsQuery query)
         {
-            var query = new ListToDoListsQuery();
-            var result = await _mediator.Send(query);
+            var response = await _mediator.Send(query);
 
-            return Result(result);
+            return Result(response);
+        }
+
+        [HttpGet]
+        [Route("Get")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var query = new GetToDoListQuery { Id = id };
+            var response = await _mediator.Send(query);
+
+            return Result(response);
+        }
+
+        [HttpPost]
+        [Route("Save")]
+        public async Task<IActionResult> Save(SaveToDoListCommand command)
+        {
+            var response = await _mediator.Send(command);
+
+            return Result(response);
         }
     }
 }
