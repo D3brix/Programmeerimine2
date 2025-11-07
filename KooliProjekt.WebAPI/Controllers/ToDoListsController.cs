@@ -1,4 +1,4 @@
-﻿using KooliProjekt.Application.Features.TodoLists;
+﻿using KooliProjekt.Application.Features.ToDoLists;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
