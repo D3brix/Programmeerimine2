@@ -2,9 +2,9 @@
 using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 
-namespace KooliProjekt.Application.Features.Teachers
+namespace KooliProjekt.Application.Features.Teams
 {
-    public class SaveTeachersCommand : IRequest<OperationResult>, ITransactional
+    public class SaveTeamCommand : IRequest<OperationResult>, ITransactional
     {
         public int Id { get; set; }
         public string Title { get; set; }

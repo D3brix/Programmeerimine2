@@ -2,9 +2,9 @@
 using MediatR;
 using System;
 
-namespace KooliProjekt.Application.Features.Teachers
+namespace KooliProjekt.Application.Features.Teams
 {
-    public class GetTeachersQuery : IRequest<OperationResult<object>>
+    public class GetTeamQuery : IRequest<OperationResult<object>>
     {
         public int Id { get; set; }
     }

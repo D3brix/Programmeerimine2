@@ -9,34 +9,29 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KooliProjekt.Application.Features.ToDoLists
+namespace KooliProjekt.Application.Features.Teams
 {
-    public class GetToDoListQueryHandler : IRequestHandler<GetToDoListQuery, OperationResult<object>>
+    public class GetTeamQueryHandler : IRequestHandler<GetTeamQuery, OperationResult<object>>
     {
-        public readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public GetToDoListQueryHandler(ApplicationDbContext dbContext)
+        public GetTeamQueryHandler(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<OperationResult<object>> Handle(GetToDoListQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<object>> Handle(GetTeamQuery request, CancellationToken cancellationToken)
         {
             var result = new OperationResult<object>();
 
             result.Value = await _dbContext
-                .ToDoLists
-                .Include(list => list.Items)
+                .Teams
                 .Where(list => list.Id == request.Id)
                 .Select(list => new
                 {
                     Id = list.Id,
                     Title = list.Title,
-                    Items = list.Items.Select(item => new
-                    {
-                        item.Id,
-                        item.Title
-                    })
+                   
                 })
                 .FirstOrDefaultAsync();
 

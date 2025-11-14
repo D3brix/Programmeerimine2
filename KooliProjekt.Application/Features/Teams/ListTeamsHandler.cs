@@ -9,18 +9,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class ListTeachersHandler : IRequestHandler<ListTeachersQuery, List<Teacher>>
+public class ListTeamsHandler : IRequestHandler<ListTeamsQuery, List<Team>>
 {
     private readonly ApplicationDbContext _context;
 
-    public ListTeachersHandler(ApplicationDbContext context)
+    public ListTeamsHandler(ApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<List<Teacher>> Handle(ListTeachersQuery request, CancellationToken cancellationToken)
+    public async Task<List<Team>> Handle(ListTeamsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Teachers.ToListAsync(cancellationToken);
+        return await _context.Teams.ToListAsync(cancellationToken);
     }
 }
 

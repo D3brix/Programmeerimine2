@@ -14,9 +14,9 @@ namespace KooliProjekt.Application.Data.Models
         {
         }
 
-        public DbSet<ToDoList> ToDoLists { get; set; }
-        public DbSet<ToDoItem> ToDoItems { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
     }
 }
