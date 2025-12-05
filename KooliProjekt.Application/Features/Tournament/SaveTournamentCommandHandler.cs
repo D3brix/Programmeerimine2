@@ -9,31 +9,26 @@ namespace KooliProjekt.Application.Features.Tournament
 {
     public class SaveTournamentCommandHandler : IRequestHandler<SaveTournamentCommand, OperationResult>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.ITournamentRepository _tournamentRepository;
 
-        public SaveTournamentCommandHandler(ApplicationDbContext dbContext)
+        public SaveTournamentCommandHandler(KooliProjekt.Application.Data.Repositories.ITournamentRepository tournamentRepository)
         {
-            _dbContext = dbContext;
+            _tournamentRepository = tournamentRepository;
         }
 
         public async Task<OperationResult> Handle(SaveTournamentCommand request, CancellationToken cancellationToken)
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+            var entity = new KooliProjekt.Application.Data.Models.Tournament();
+            if (request.Id != 0)
+            {
+                entity = await _tournamentRepository.GetByIdAsync(request.Id);
+            }
 
-            //list.Title = request.Title;
+            entity.Title = request.Title;
 
-            //await _dbContext.SaveChangesAsync();
+            await _tournamentRepository.SaveAsync(entity);
 
             return result;
         }

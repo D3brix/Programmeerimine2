@@ -15,27 +15,27 @@ namespace KooliProjekt.Application.Features.Games
 {
     public class GetGameQueryHandler : IRequestHandler<GetGameQuery, OperationResult<object>>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.IGameRepository _gameRepository;
 
-        public GetGameQueryHandler(ApplicationDbContext dbContext)
+        public GetGameQueryHandler(KooliProjekt.Application.Data.Repositories.IGameRepository gameRepository)
         {
-            _dbContext = dbContext;
+            _gameRepository = gameRepository;
         }
 
         public async Task<OperationResult<object>> Handle(GetGameQuery request, CancellationToken cancellationToken)
         {
             var result = new OperationResult<object>();
 
-            result.Value = await _dbContext
-                .Games
-                .Where(list => list.Id == request.Id)
-                .Select(list => new
+            var g = await _gameRepository.GetByIdAsync(request.Id);
+
+            if (g != null)
+            {
+                result.Value = new
                 {
-                    Id = list.Id,
-                    Title = list.Title,
-                   
-                })
-                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+                    Id = g.Id,
+                    Title = g.Title
+                };
+            }
 
             return result;
         }

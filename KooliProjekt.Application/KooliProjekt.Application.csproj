@@ -12,9 +12,26 @@
     <None Remove="Features\NewFolder\**" />
   </ItemGroup>
 
+  <!-- Exclude teacher example (naide) sources from compilation to avoid duplicate definitions -->
+  <ItemGroup>
+    <Compile Remove="naide\**\*.cs" />
+    <EmbeddedResource Remove="naide\**\*" />
+    <None Remove="naide\**\*" />
+  </ItemGroup>
+
   <ItemGroup>
     <Folder Include="Dto\" />
-    <Folder Include="Migrations\" />
+    <Folder Include="naide\20251128-Repository\KooliProjekt.Application\Dto\" />
+    <Folder Include="naide\20251128-Repository\KooliProjekt.Application\Properties\PublishProfiles\" />
+    <Folder Include="naide\20251128-Repository\KooliProjekt.WebAPI\obj\Debug\net8.0\staticwebassets\" />
+    <Folder Include="naide\20251128-Repository\KooliProjekt.WebAPI\obj\Release\net8.0\staticwebassets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="naide\20251128-Repository\KooliProjekt.Application\KooliProjekt.Application.csproj" />
+    <None Include="naide\20251128-Repository\KooliProjekt.sln" />
+    <None Include="naide\20251128-Repository\KooliProjekt.WebAPI\KooliProjekt.WebAPI.csproj" />
+    <None Include="naide\20251128-Repository\KooliProjekt.WebAPI\KooliProjekt.WebAPI.csproj.user" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,33 +13,33 @@ namespace KooliProjekt.Application.Features.Predictions
 {
     public class GetPredictionQueryHandler : IRequestHandler<GetPredictionQuery, OperationResult<object>>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.IPredictionRepository _predictionRepository;
 
-        public GetPredictionQueryHandler(ApplicationDbContext dbContext)
+        public GetPredictionQueryHandler(KooliProjekt.Application.Data.Repositories.IPredictionRepository predictionRepository)
         {
-            _dbContext = dbContext;
+            _predictionRepository = predictionRepository;
         }
 
         public async Task<OperationResult<object>> Handle(GetPredictionQuery request, CancellationToken cancellationToken)
         {
             var result = new OperationResult<object>();
 
-            result.Value = await _dbContext
-                .Predictions
-                .Where(list => list.Id == request.Id)
-                .Select(list => new
-                {
-                    Id = list.Id,
-                    starttime = list.starttime,
-                    points = list.points,
-                    score1 = list.score1,
-                    score2 = list.score2, 
-                    GameId = list.GameId,
-                    Team1Id = list.Team1Id,
-                    Team2Id = list.Team2Id
+            var p = await _predictionRepository.GetByIdAsync(request.Id);
 
-                })
-                .FirstOrDefaultAsync();
+            if (p != null)
+            {
+                result.Value = new
+                {
+                    Id = p.Id,
+                    starttime = p.starttime,
+                    points = p.points,
+                    score1 = p.score1,
+                    score2 = p.score2,
+                    GameId = p.GameId,
+                    Team1Id = p.Team1Id,
+                    Team2Id = p.Team2Id
+                };
+            }
 
             return result;
         }

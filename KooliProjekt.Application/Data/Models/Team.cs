@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace KooliProjekt.Application.Data.Models
 {
-    public class Team
+    public class Team : Entity
     {
-        public int Id { get; set; }
+        // Id inherited from Entity
 
         [Required]
         [MaxLength(50)]

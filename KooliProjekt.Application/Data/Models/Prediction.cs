@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace KooliProjekt.Application.Data.Models
 {
-    public class Prediction
+    public class Prediction : Entity
     {
-        public int Id { get; set; }
+        // Id inherited from Entity
         public int score1 {  get; set; }
         public int score2 { get; set; } 
          public int starttime { get; set; }

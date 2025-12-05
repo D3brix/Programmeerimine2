@@ -14,27 +14,27 @@ namespace KooliProjekt.Application.Features.Teams
 
     public class GetTeamQueryHandler : IRequestHandler<GetTeamQuery, OperationResult<object>>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.ITeamRepository _teamRepository;
 
-        public GetTeamQueryHandler(ApplicationDbContext dbContext)
+        public GetTeamQueryHandler(KooliProjekt.Application.Data.Repositories.ITeamRepository teamRepository)
         {
-            _dbContext = dbContext;
+            _teamRepository = teamRepository;
         }
 
         public async Task<OperationResult<object>> Handle(GetTeamQuery request, CancellationToken cancellationToken)
         {
             var result = new OperationResult<object>();
 
-            result.Value = await _dbContext
-                .Teams
-                .Where(list => list.Id == request.Id)
-                .Select(list => new
-                {
-                    Id = list.Id,
-                    Title = list.Title,
+            var t = await _teamRepository.GetByIdAsync(request.Id);
 
-                })
-                .FirstOrDefaultAsync();
+            if (t != null)
+            {
+                result.Value = new
+                {
+                    Id = t.Id,
+                    Title = t.Title
+                };
+            }
 
             return result;
         }

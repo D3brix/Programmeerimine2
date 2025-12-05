@@ -10,31 +10,26 @@ namespace KooliProjekt.Application.Features.Teams
 {
     public class SaveTeamCommandHandler : IRequestHandler<SaveTeamCommand, OperationResult>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.ITeamRepository _teamRepository;
 
-        public SaveTeamCommandHandler(ApplicationDbContext dbContext)
+        public SaveTeamCommandHandler(KooliProjekt.Application.Data.Repositories.ITeamRepository teamRepository)
         {
-            _dbContext = dbContext;
+            _teamRepository = teamRepository;
         }
 
         public async Task<OperationResult> Handle(SaveTeamCommand request, CancellationToken cancellationToken)
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+            var entity = new KooliProjekt.Application.Data.Models.Team();
+            if (request.Id != 0)
+            {
+                entity = await _teamRepository.GetByIdAsync(request.Id);
+            }
 
-            //list.Title = request.Title;
+            entity.Title = request.Title;
 
-            //await _dbContext.SaveChangesAsync();
+            await _teamRepository.SaveAsync(entity);
 
             return result;
         }

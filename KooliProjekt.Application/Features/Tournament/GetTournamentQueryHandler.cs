@@ -13,27 +13,27 @@ namespace KooliProjekt.Application.Features.Tournament
 {
     public class GetTournamentQueryHandler : IRequestHandler<GetTournamentQuery, OperationResult<object>>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.ITournamentRepository _tournamentRepository;
 
-        public GetTournamentQueryHandler(ApplicationDbContext dbContext)
+        public GetTournamentQueryHandler(KooliProjekt.Application.Data.Repositories.ITournamentRepository tournamentRepository)
         {
-            _dbContext = dbContext;
+            _tournamentRepository = tournamentRepository;
         }
 
         public async Task<OperationResult<object>> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
             var result = new OperationResult<object>();
 
-            result.Value = await _dbContext
-                .Tournaments
-                .Where(list => list.Id == request.Id)
-                .Select(list => new
+            var t = await _tournamentRepository.GetByIdAsync(request.Id);
+
+            if (t != null)
+            {
+                result.Value = new
                 {
-                    Id = list.Id,
-                    Title = list.Title,
-                   
-                })
-                .FirstOrDefaultAsync();
+                    Id = t.Id,
+                    Title = t.Title
+                };
+            }
 
             return result;
         }

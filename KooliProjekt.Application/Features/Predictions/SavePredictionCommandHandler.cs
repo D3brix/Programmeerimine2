@@ -9,31 +9,34 @@ namespace KooliProjekt.Application.Features.Predictions
 {
     public class SavePredictionCommandHandler : IRequestHandler<SavePredictionCommand, OperationResult>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.IPredictionRepository _predictionRepository;
 
-        public SavePredictionCommandHandler(ApplicationDbContext dbContext)
+        public SavePredictionCommandHandler(KooliProjekt.Application.Data.Repositories.IPredictionRepository predictionRepository)
         {
-            _dbContext = dbContext;
+            _predictionRepository = predictionRepository;
         }
 
         public async Task<OperationResult> Handle(SavePredictionCommand request, CancellationToken cancellationToken)
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+            var entity = new KooliProjekt.Application.Data.Models.Prediction();
+            if (request.Id != 0)
+            {
+                entity = await _predictionRepository.GetByIdAsync(request.Id);
+            }
 
-            //list.Title = request.Title;
+            // map properties - adjust as needed
+            entity.score1 = request.score1;
+            entity.score2 = request.score2;
+            entity.starttime = request.starttime;
+            entity.endtime = request.endtime;
+            entity.points = request.points;
+            entity.GameId = request.GameId;
+            entity.Team1Id = request.Team1Id;
+            entity.Team2Id = request.Team2Id;
 
-            //await _dbContext.SaveChangesAsync();
+            await _predictionRepository.SaveAsync(entity);
 
             return result;
         }

@@ -1,6 +1,7 @@
 using FluentValidation;
 using KooliProjekt.Application.Behaviors;
-using KooliProjekt.Application.Data.Models;
+using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,11 +40,9 @@ namespace KooliProjekt.WebAPI
                 config.AddOpenBehavior(typeof(TransactionalBehavior<,>));
             });
 
-            // Register repositories
-            builder.Services.AddScoped<KooliProjekt.Application.Data.Repositories.ITeamRepository, KooliProjekt.Application.Data.Repositories.TeamRepository>();
-            builder.Services.AddScoped<KooliProjekt.Application.Data.Repositories.IGameRepository, KooliProjekt.Application.Data.Repositories.GameRepository>();
-            builder.Services.AddScoped<KooliProjekt.Application.Data.Repositories.ITournamentRepository, KooliProjekt.Application.Data.Repositories.TournamentRepository>();
-            builder.Services.AddScoped<KooliProjekt.Application.Data.Repositories.IPredictionRepository, KooliProjekt.Application.Data.Repositories.PredictionRepository>();
+            // 28.11
+            // Registreeri repository klassid
+            builder.Services.AddScoped<IToDoListRepository, ToDoListRepository>();
 
             var app = builder.Build();
 
@@ -55,21 +54,22 @@ namespace KooliProjekt.WebAPI
             }
 
             app.UseAuthorization();
-
-
             app.MapControllers();
 
-            // Ensure database is created/migrated and seed test data
+            // 15.11.2025
+            // Loo andmebaas kui seda pole, lisa puuduvad migratsioonid
+            // ja genereeri andmed
             using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var db = services.GetRequiredService<ApplicationDbContext>();
+            using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+            {                   
+                dbContext.Database.Migrate();
 
-                // apply migrations (creates database if missing)
-                db.Database.Migrate();
-
-                // seed data
-                SeedData.Generate(db).GetAwaiter().GetResult();
+                // Preprotsessori direktiiv, mis tagab, et andmete genereerimine
+                // toimub ainult arendusrežiimis
+#if DEBUG
+                var generator = new SeedData(dbContext);
+                generator.Generate();
+#endif
             }
 
             app.Run();

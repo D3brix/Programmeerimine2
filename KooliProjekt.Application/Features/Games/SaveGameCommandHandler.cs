@@ -10,31 +10,26 @@ namespace KooliProjekt.Application.Features.Games
 {
     public class SaveGameCommandHandler : IRequestHandler<SaveGameCommand, OperationResult>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly KooliProjekt.Application.Data.Repositories.IGameRepository _gameRepository;
 
-        public SaveGameCommandHandler(ApplicationDbContext dbContext)
+        public SaveGameCommandHandler(KooliProjekt.Application.Data.Repositories.IGameRepository gameRepository)
         {
-            _dbContext = dbContext;
+            _gameRepository = gameRepository;
         }
 
         public async Task<OperationResult> Handle(SaveGameCommand request, CancellationToken cancellationToken)
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+            var entity = new KooliProjekt.Application.Data.Models.Game();
+            if (request.Id != 0)
+            {
+                entity = await _gameRepository.GetByIdAsync(request.Id);
+            }
 
-            //list.Title = request.Title;
+            entity.Title = request.Title;
 
-            //await _dbContext.SaveChangesAsync();
+            await _gameRepository.SaveAsync(entity);
 
             return result;
         }
