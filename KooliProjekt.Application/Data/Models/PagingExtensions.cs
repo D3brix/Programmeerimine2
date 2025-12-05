@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using KooliProjekt.Application.Infrastructure.Paging;
 using Microsoft.EntityFrameworkCore;
 
-namespace KooliProjekt.Application.Data
+namespace KooliProjekt.Application.Data.Models
 {
     public static class PagingExtensions
     {

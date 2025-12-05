@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,43 +8,46 @@ namespace KooliProjekt.WebAPI.Controllers
     [Route("api/[controller]")]
     public class TeamsController : ControllerBase
     {
-        private static readonly string[] TeamName = new[]
-        {
-            "Mari", "Jüri", "Kati", "Peeter", "Anne", "Tarmo", "Laura", "Karl"
-        };
+        private static readonly List<Team> _teams = new();
 
-        private static readonly string[] Divison = new[]
+        [HttpGet("get")]
+        public IEnumerable<Team> GetAll()
         {
-            "D1", "D2", "D3"
-        };
+            return _teams;
+        }
 
-        private static readonly string[] Moods = new[]
+        [HttpGet("get/{id}")]
+        public ActionResult<Team> Get(int id)
         {
-            "Heas tujus", "Natuke väsinud", "Väga motiveeritud", "Tööstressis", "Rahulik", "Energiline"
-        };
+            var team = _teams.FirstOrDefault(t => t.Id == id);
+            return team is null ? NotFound() : Ok(team);
+        }
 
-        [HttpGet]
-        public IEnumerable<Teams> Get()
+        [HttpPost("save")]
+        public ActionResult Save([FromBody] Team team)
         {
-            return Enumerable.Range(1, 5).Select(index => new Teams
-            {
-                Id = index,
-                Team = $"{TeamName[Random.Shared.Next(TeamName.Length)]}",
-                Divison = Divison[Random.Shared.Next(Divison.Length)],
-                Moods = Moods[Random.Shared.Next(Moods.Length)],
-            })
-            .ToArray();
+            team.Id = _teams.Count + 1;
+            _teams.Add(team);
+            return Ok(team);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public ActionResult Delete(int id)
+        {
+            var team = _teams.FirstOrDefault(t => t.Id == id);
+            if (team is null)
+                return NotFound();
+
+            _teams.Remove(team);
+            return Ok(new { message = "Deleted", id });
         }
     }
 
-    public class Teams
+    public class Team
     {
         public int Id { get; set; }
-    public string Team { get; set; } = "";
-    public string Divison { get; set; } = "";
-    public string Moods { get; set; } = "";
+        public string TeamName { get; set; } = "";
+        public string Division { get; set; } = "";
+        public string Mood { get; set; } = "";
+    }
 }
-
-
-}
-

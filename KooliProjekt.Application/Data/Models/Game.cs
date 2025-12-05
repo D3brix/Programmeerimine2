@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,14 @@ namespace KooliProjekt.Application.Data.Models
     public class Game 
     {
         public int Id { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [MinLength(1)]
         public string Title { get; set; }
         public DateTime Begins { get; set; }
         public DateTime Ends { get; set; }
+
+        public DateTime Date { get; set; }
 
         public int Team1Score { get; set; }
         public int Team2Score { get; set; }

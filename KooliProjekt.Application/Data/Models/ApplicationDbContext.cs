@@ -16,7 +16,8 @@ namespace KooliProjekt.Application.Data.Models
 
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<Team> Teams { get; set; }
 
+        public DbSet<Prediction> Predictions { get; set; }
+        public DbSet<Team> Teams { get; set; }
     }
 }

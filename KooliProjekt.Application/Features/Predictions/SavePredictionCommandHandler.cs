@@ -1,23 +1,22 @@
 ﻿using KooliProjekt.Application.Data;
 using KooliProjekt.Application.Data.Models;
-using KooliProjekt.Application.Features.Teams;
 using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KooliProjekt.Application.Features.Teams
+namespace KooliProjekt.Application.Features.Predictions
 {
-    public class SaveTeamCommandHandler : IRequestHandler<SaveTeamCommand, OperationResult>
+    public class SavePredictionCommandHandler : IRequestHandler<SavePredictionCommand, OperationResult>
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public SaveTeamCommandHandler(ApplicationDbContext dbContext)
+        public SavePredictionCommandHandler(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<OperationResult> Handle(SaveTeamCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(SavePredictionCommand request, CancellationToken cancellationToken)
         {
             var result = new OperationResult();
 

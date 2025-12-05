@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using KooliProjekt.Application.Data;
 using KooliProjekt.Application.Data.Models;
 
-namespace KooliProjekt.Application.Features.Teams;
-public record ListTeamsQuery() : IRequest<List<Team>>
+public record ListGamesQuery() : IRequest<List<Game>>
 {
     public int Page { get; set; }
     public int PageCount { get; set; }

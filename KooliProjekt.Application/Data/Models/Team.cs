@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KooliProjekt.Application.Data
+namespace KooliProjekt.Application.Data.Models
 {
     public class Team
     {

@@ -9,20 +9,20 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KooliProjekt.Application.Features.Teams
+namespace KooliProjekt.Application.Features.Games
 {
-    public class ListTeamsHandler : IRequestHandler<ListTeamsQuery, List<Team>>
+    public class ListGamesHandler : IRequestHandler<ListGamesQuery, List<Game>>
     {
         private readonly ApplicationDbContext _context;
 
-        public ListTeamsHandler(ApplicationDbContext context)
+        public ListGamesHandler(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<Team>> Handle(ListTeamsQuery request, CancellationToken cancellationToken)
+        public async Task<List<Game>> Handle(ListGamesQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Teams.ToListAsync(cancellationToken);
+            return await _context.Games.ToListAsync(cancellationToken);
         }
     }
 }
