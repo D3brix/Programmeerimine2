@@ -1,6 +1,5 @@
 using FluentValidation;
 using KooliProjekt.Application.Behaviors;
-using KooliProjekt.Application.Data;
 using KooliProjekt.Application.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +52,19 @@ namespace KooliProjekt.WebAPI
 
 
             app.MapControllers();
+
+            // Ensure database is created/migrated and seed test data
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var db = services.GetRequiredService<ApplicationDbContext>();
+
+                // apply migrations (creates database if missing)
+                db.Database.Migrate();
+
+                // seed data
+                SeedData.Generate(db).GetAwaiter().GetResult();
+            }
 
             app.Run();
         }
