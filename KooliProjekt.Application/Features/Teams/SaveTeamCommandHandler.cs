@@ -21,21 +21,30 @@ namespace KooliProjekt.Application.Features.Teams
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+            Team team;
 
-            //list.Title = request.Title;
+            if (request.Id == 0)
+            {
+                team = new Team();
+                await _dbContext.Teams.AddAsync(team, cancellationToken);
+            }
+            else
+            {
+                team = await _dbContext.Teams.FindAsync(new object[] { request.Id }, cancellationToken);
+                if (team == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Team not found.";
+                    return result;
+                }
+            }
 
-            //await _dbContext.SaveChangesAsync();
+            team.Title = request.Title;
 
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            result.IsSuccess = true;
+            result.Message = "Team saved successfully.";
             return result;
         }
     }

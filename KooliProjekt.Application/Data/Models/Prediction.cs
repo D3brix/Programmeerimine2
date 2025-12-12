@@ -9,11 +9,13 @@ namespace KooliProjekt.Application.Data.Models
     public class Prediction
     {
         public int Id { get; set; }
-        public int score1 {  get; set; }
-        public int score2 { get; set; } 
-         public int starttime { get; set; }
-        public int endtime { get; set; }
-        public int points { get; set; }
+        public int Score1 {  get; set; }
+        public int Score2 { get; set; } 
+         public int Starttime { get; set; }
+        public int StartTime { get; internal set; }
+        public int Endtime { get; set; }
+        public int EndTime { get; internal set; }
+        public int Points { get; set; }
 
 
         public Game Game { get; set; }

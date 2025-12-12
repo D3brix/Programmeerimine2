@@ -1,5 +1,6 @@
 ﻿using KooliProjekt.Application.Data;
 using KooliProjekt.Application.Data.Models;
+using KooliProjekt.Application.Features.Predictions;
 using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 using System.Threading;
@@ -20,21 +21,50 @@ namespace KooliProjekt.Application.Features.Predictions
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+         
+            var game = await _dbContext.Games.FindAsync(new object[] { request.GameId }, cancellationToken);
+            var team1 = await _dbContext.Teams.FindAsync(new object[] { request.Team1Id }, cancellationToken);
+            var team2 = await _dbContext.Teams.FindAsync(new object[] { request.Team2Id }, cancellationToken);
 
-            //list.Title = request.Title;
+            if (game == null || team1 == null || team2 == null)
+            {
+                result.IsSuccess = false;
+                result.Message = "Game or one of the teams does not exist.";
+                return result;
+            }
 
-            //await _dbContext.SaveChangesAsync();
+            Prediction prediction;
 
+            if (request.Id == 0)
+            {
+                prediction = new Prediction();
+                await _dbContext.Predictions.AddAsync(prediction, cancellationToken);
+            }
+            else
+            {
+                prediction = await _dbContext.Predictions.FindAsync(new object[] { request.Id }, cancellationToken);
+                if (prediction == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Prediction not found.";
+                    return result;
+                }
+            }
+
+          
+            prediction.GameId = request.GameId;
+            prediction.Team1Id = request.Team1Id;
+            prediction.Team2Id = request.Team2Id;
+            prediction.Score1 = request.Score1;
+            prediction.Score2 = request.Score2;
+            prediction.Points = request.Points;
+            prediction.StartTime = request.StartTime;
+            prediction.EndTime = request.EndTime;
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            result.IsSuccess = true;
+            result.Message = "Prediction saved successfully.";
             return result;
         }
     }

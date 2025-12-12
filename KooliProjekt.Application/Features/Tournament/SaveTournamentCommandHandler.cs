@@ -20,21 +20,32 @@ namespace KooliProjekt.Application.Features.Tournament
         {
             var result = new OperationResult();
 
-            //var list = new ToDoList();
-            //if (request.Id == 0)
-            //{
-            //    await _dbContext.ToDoLists.AddAsync(list);
-            //}
-            //else
-            //{
-            //    list = await _dbContext.ToDoLists.FindAsync(request.Id);
-            //    //_dbContext.ToDoLists.Update(list);
-            //}
+        
+            KooliProjekt.Application.Data.Models.Tournament tournament;
 
-            //list.Title = request.Title;
+            if (request.Id == 0)
+            {
+                tournament = new KooliProjekt.Application.Data.Models.Tournament();
+                await _dbContext.Tournaments.AddAsync(tournament, cancellationToken);
+            }
+            else
+            {
+                tournament = await _dbContext.Tournaments.FindAsync(new object[] { request.Id }, cancellationToken);
+                if (tournament == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Tournament not found.";
+                    return result;
+                }
+            }
 
-            //await _dbContext.SaveChangesAsync();
+         
+            tournament.Title = request.Title;
 
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            result.IsSuccess = true;
+            result.Message = "Tournament saved successfully.";
             return result;
         }
     }
